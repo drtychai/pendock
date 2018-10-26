@@ -141,7 +141,7 @@ RUN cd $HOME/tools \
 # Exploitation tools
 #####################################################
 RUN apt update \
-	&& apt -y install afl sqlmap \
+	&& apt -y install afl john sqlmap \
 	&& apt clean
 
 # Install ropper
@@ -161,5 +161,11 @@ RUN cd ~/tools \
 RUN cd ~/tools \
     && git clone --depth 1 https://github.com/radare/radare2 && cd radare2 \
     && ./sys/install.sh
+
+#####################################################
+# Tools to add
+## hashcat
+#####################################################
+
 
 WORKDIR /root/
