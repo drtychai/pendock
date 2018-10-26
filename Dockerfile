@@ -15,7 +15,7 @@ RUN mkdir ~/tools
 # Install base tools
 RUN apt update \
 	&& apt -y install vim patchelf netcat socat strace ltrace curl wget git gdb \
-	&& apt -y install man sudo inetutils-ping gnupg locate\
+	&& apt -y install man sudo inetutils-ping gnupg locate ftp\
 	&& apt clean
 
 RUN apt update \
@@ -26,8 +26,9 @@ RUN apt update \
 RUN python3 -m pip install --upgrade pip
 RUN python -m pip install --upgrade pip
 
-RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB \
-	&& curl -sSL https://get.rvm.io | bash -s stable --rails
+RUN apt update \
+	&& apt install -y ruby-full \
+	&& apt clean
 
 RUN apt update \
     && apt -y install gcc-multilib g++-multilib \
@@ -46,6 +47,25 @@ RUN cd ~/tools \
     && wget https://raw.githubusercontent.com/hugsy/stuff/master/update-trinity.sh \
     && bash ./update-trinity.sh
 RUN ldconfig
+
+# Z3
+RUN cd ~/tools \
+    && git clone --depth 1 https://github.com/Z3Prover/z3.git && cd z3 \
+    && python scripts/mk_make.py --python \
+    && cd build; make && make install
+
+# pwntools
+RUN python -m pip install pwntools==3.12.1
+
+# one_gadget
+RUN gem install one_gadget
+
+# arm_now
+RUN python3 -m pip install arm_now
+
+RUN apt update \
+    && apt install -y e2tools qemu \
+    && apt clean
 
 # Install tmux from source
 RUN apt update \
@@ -70,11 +90,17 @@ RUN curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/conf
 RUN git clone https://github.com/offensive-security/exploitdb.git /opt/exploitdb \
 	&& ln -sf /opt/exploitdb/searchsploit /usr/bin/searchsploit
 
+# Clone wordlists
+RUN cd /usr/share/ \
+	&& git clone https://github.com/drtychai/wordlists.git /usr/share/wordlists \
+	&& tar zxvf /usr/share/wordlists/rockyou.tar.gz -C /usr/share/wordlists/ \
+	&& rm /usr/share/wordlists/rockyou.tar.gz
+
 #####################################################
 # Install information gathering tools
 #####################################################
 RUN apt update \
-	&& apt -y install arp-scan masscan nikto nmap snmp \
+	&& apt -y install aircrack-ng arp-scan masscan nikto nmap snmp \
 	&& apt clean
 
 # Install and alias dnsrecon
@@ -96,7 +122,46 @@ RUN cd $HOME/tools \
 	&& chmod +x ./Sublist3r/sublist3r.py \
 	&& echo 'alias sublist3r="~/tools/sublist3r/sublist3r.py"' >> $HOME/.bashrc
 
-# Install and alias aquatone
-#RUN gem install aquatone
+# Install aquatone
+RUN gem install aquatone
+
+# Install and alias dirsearch
+RUN cd $HOME/tools \
+    && git clone https://github.com/maurosoria/dirsearch \
+    && chmod +x ./dirsearch/dirsearch.py \
+    && echo 'alias dirsearch="~/tools/dirsearch/dirsearch.py"' >> $HOME/.bashrc
+
+# Install and alias dirb
+
+# Install and alias gobuster
+
+# Install and alias wfuzz
+
+#####################################################
+# Exploitation tools
+#####################################################
+RUN apt update \
+	&& apt -y install sqlmap \
+	&& apt clean
+
+# Install and alias alf
+
+# Install ropper
+RUN python3 -m pip install ropper
+
+# Install ripgrep
+RUN curl -LO https://github.com/BurntSushi/ripgrep/releases/download/0.9.0/ripgrep_0.9.0_amd64.deb \
+    && dpkg -i ripgrep_0.9.0_amd64.deb \
+    && rm ripgrep_0.9.0_amd64.deb
+
+# Install binwalk
+RUN cd ~/tools \
+    && git clone --depth 1 https://github.com/devttys0/binwalk && cd binwalk \
+    && python3 setup.py install
+
+# Instal radare2
+RUN cd ~/tools \
+    && git clone --depth 1 https://github.com/radare/radare2 && cd radare2 \
+    && ./sys/install.sh
 
 WORKDIR /root/
