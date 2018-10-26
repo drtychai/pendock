@@ -141,10 +141,8 @@ RUN cd $HOME/tools \
 # Exploitation tools
 #####################################################
 RUN apt update \
-	&& apt -y install sqlmap \
+	&& apt -y install afl sqlmap \
 	&& apt clean
-
-# Install and alias alf
 
 # Install ropper
 RUN python3 -m pip install ropper
