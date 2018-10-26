@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker kill kpen >/dev/null && echo "[+] Stopped"

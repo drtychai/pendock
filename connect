@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ "$#" -ge 1 ]; then
+    docker exec -it kpen $@
+else
+    docker exec -it kpen tmux
+fi
