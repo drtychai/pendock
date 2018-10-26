@@ -15,7 +15,7 @@ RUN mkdir ~/tools
 # Install base tools
 RUN apt update \
 	&& apt -y install vim patchelf netcat socat strace ltrace curl wget git gdb \
-	&& apt -y install man sudo inetutils-ping \
+	&& apt -y install man sudo inetutils-ping gnupg locate\
 	&& apt clean
 
 RUN apt update \
@@ -25,6 +25,9 @@ RUN apt update \
 
 RUN python3 -m pip install --upgrade pip
 RUN python -m pip install --upgrade pip
+
+RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB \
+	&& curl -sSL https://get.rvm.io | bash -s stable --rails
 
 RUN apt update \
     && apt -y install gcc-multilib g++-multilib \
@@ -67,17 +70,33 @@ RUN curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/conf
 RUN git clone https://github.com/offensive-security/exploitdb.git /opt/exploitdb \
 	&& ln -sf /opt/exploitdb/searchsploit /usr/bin/searchsploit
 
+#####################################################
 # Install information gathering tools
+#####################################################
 RUN apt update \
-	&& apt -y install arp-scan nikto nmap \
+	&& apt -y install arp-scan masscan nikto nmap snmp \
 	&& apt clean
 
-# Install dnsrecon
-RUN cd ~/tools \
+# Install and alias dnsrecon
+RUN cd $HOME/tools \
 	&& git clone https://github.com/darkoperator/dnsrecon \
 	&& pip install -r ./dnsrecon/requirements.txt \
 	&& chmod +x ./dnsrecon/dnsrecon.py \
 	&& echo 'alias dnsrecon="~/tools/dnsrecon/dnsrecon.py"' >> $HOME/.bashrc
 
+# Install and alias enum4linux
+RUN cd $HOME/tools \
+	&& git clone https://github.com/portcullislabs/enum4linux \
+	&& chmod +x ./enum4linux/enum4linux.pl \
+	&& echo 'alias enum4linux="~/tools/enum4linux/enum4linux.pl"' >> $HOME/.bashrc
+
+# Install and alias sublist3r
+RUN cd $HOME/tools \
+	&& git clone https://github.com/aboul3la/Sublist3r \
+	&& chmod +x ./Sublist3r/sublist3r.py \
+	&& echo 'alias sublist3r="~/tools/sublist3r/sublist3r.py"' >> $HOME/.bashrc
+
+# Install and alias aquatone
+#RUN gem install aquatone
 
 WORKDIR /root/
