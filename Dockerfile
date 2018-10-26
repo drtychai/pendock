@@ -69,8 +69,15 @@ RUN git clone https://github.com/offensive-security/exploitdb.git /opt/exploitdb
 
 # Install information gathering tools
 RUN apt update \
-	&& apt -y install arp-scan dnmap dnsenum DNSrecon enum4linux nikto nmap \
+	&& apt -y install arp-scan nikto nmap \
 	&& apt clean
+
+# Install dnsrecon
+RUN cd ~/tools \
+	&& git clone https://github.com/darkoperator/dnsrecon \
+	&& pip install -r ./dnsrecon/requirements.txt \
+	&& chmod +x ./dnsrecon/dnsrecon.py \
+	&& echo 'alias dnsrecon="~/tools/dnsrecon/dnsrecon.py"' >> $HOME/.bashrc
 
 
 WORKDIR /root/
