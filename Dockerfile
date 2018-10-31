@@ -15,7 +15,7 @@ RUN mkdir ~/tools
 # Install base tools
 RUN apt update \
 	&& apt -y install vim patchelf netcat socat strace ltrace curl wget git gdb \
-	&& apt -y install man sudo inetutils-ping gnupg locate ftp\
+	&& apt -y install man sudo inetutils-ping gnupg locate ftp \
 	&& apt clean
 
 RUN apt update \
@@ -25,6 +25,7 @@ RUN apt update \
 
 RUN python3 -m pip install --upgrade pip
 RUN python -m pip install --upgrade pip
+RUN pip install --upgrade setuptools
 
 RUN apt update \
 	&& apt install -y ruby-full \
@@ -144,6 +145,12 @@ RUN apt update \
 	&& apt -y install aircrack-ng arp-scan masscan nikto nmap snmp \
 	&& apt clean
 
+# Grab lineum, linuxprivcheck, windows-priv-checker
+RUN cd $HOME/tools \
+	&& git clone https://github.com/rebootuser/LinEnum \
+	&& git clone https://github.com/sleventyeleven/linuxprivchecker \
+	&& git clone https://github.com/pentestmonkey/windows-privesc-check
+
 # Install and alias dnsrecon
 RUN cd $HOME/tools \
 	&& git clone https://github.com/darkoperator/dnsrecon \
@@ -174,10 +181,26 @@ RUN cd $HOME/tools \
 
 # Install and alias dirb
 
-# Install and alias gobuster
+# Install gobuster
+RUN cd $GOPATH/src \
+	&& git clone https://github.com/OJ/gobuster && cd ./gobuster \
+	&& go get && go build && go install
 
-# Install and alias wfuzz
+# Install wfuzz
+RUN cd $HOME/tools \
+	&& git clone https://github.com/xmendez/wfuzz && cd ./wfuzz
+	#&& pip install --upgrade setuptools \
+	#&& pip install $HOME/tools/wfuzz
 
+# Install impacket
+RUN cd $HOME/tools \
+	&& git clone https://github.com/SecureAuthCorp/impacket && cd ./impacket \
+	&& pip install .
+
+# Install SMBetray
+RUN cd $HOME/tools \
+	&& git clone https://github.com/quickbreach/SMBetray && cd ./SMBetray \
+	&& chmod +x ./install.sh && echo 'y' - | ./install.sh
 
 #####################################################
 # Exploitation tools
@@ -196,18 +219,34 @@ RUN curl -LO https://github.com/BurntSushi/ripgrep/releases/download/0.9.0/ripgr
 
 # Install binwalk
 RUN cd ~/tools \
-    && git clone --depth 1 https://github.com/devttys0/binwalk && cd binwalk \
+    && git clone --depth 1 https://github.com/devttys0/binwalk && cd ./binwalk \
     && python3 setup.py install
 
 # Instal radare2
 RUN cd ~/tools \
-    && git clone --depth 1 https://github.com/radare/radare2 && cd radare2 \
+    && git clone --depth 1 https://github.com/radare/radare2 && cd ./radare2 \
     && ./sys/install.sh
+
+# Install powershell empire
+RUN cd ~/tools \
+	&& git clone https://github.com/EmpireProject/Empire && cd ./Empire \
+	&& ./setup/install.sh
+
+# Clone powersploit
+RUN cd ~/tools \
+	&& git clone https://github.com/PowerShellMafia/PowerSploit
 
 #####################################################
 # Tools to add
 ## hashcat
+## merlin
+## potentially add GUI support and tools
 #####################################################
 
+# Payloads
+RUN cd \
+	&& git clone --recursive https://github.com/drtychai/payloads && cd ./payloads \
+	&& chmod +x ./init.sh \
+	&& ./init.sh
 
 WORKDIR /root/
