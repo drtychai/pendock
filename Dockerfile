@@ -183,31 +183,31 @@ RUN cd $HOME/tools \
 
 # Install gobuster
 RUN cd $GOPATH/src \
-	&& git clone https://github.com/OJ/gobuster && cd ./gobuster \
-	&& go get && go build && go install
+    && git clone https://github.com/OJ/gobuster && cd ./gobuster \
+    && go get && go build && go install
 
 # Install wfuzz
 RUN cd $HOME/tools \
-	&& git clone https://github.com/xmendez/wfuzz && cd ./wfuzz
-	#&& pip install --upgrade setuptools \
-	#&& pip install $HOME/tools/wfuzz
+    && git clone https://github.com/xmendez/wfuzz && cd ./wfuzz
+    #&& pip install --upgrade setuptools \
+    #&& pip install $HOME/tools/wfuzz
 
 # Install impacket
 RUN cd $HOME/tools \
-	&& git clone https://github.com/SecureAuthCorp/impacket && cd ./impacket \
-	&& pip install .
+    && git clone https://github.com/SecureAuthCorp/impacket && cd ./impacket \
+    && pip install .
 
 # Install SMBetray
 RUN cd $HOME/tools \
-	&& git clone https://github.com/quickbreach/SMBetray && cd ./SMBetray \
-	&& chmod +x ./install.sh && echo 'y' - | ./install.sh
+    && git clone https://github.com/quickbreach/SMBetray && cd ./SMBetray \
+    && chmod +x ./install.sh && echo 'y' - | ./install.sh
 
 #####################################################
 # Exploitation tools
 #####################################################
 RUN apt update \
-	&& apt -y install afl john sqlmap \
-	&& apt clean
+    && apt -y install afl john sqlmap \
+    && apt clean
 
 # Install ropper
 RUN python3 -m pip install ropper
@@ -229,12 +229,12 @@ RUN cd ~/tools \
 
 # Install powershell empire
 RUN cd ~/tools \
-	&& git clone https://github.com/EmpireProject/Empire && cd ./Empire \
-	&& ./setup/install.sh
+    && git clone https://github.com/EmpireProject/Empire && cd ./Empire \
+    && ./setup/install.sh
 
 # Clone powersploit
 RUN cd ~/tools \
-	&& git clone https://github.com/PowerShellMafia/PowerSploit
+    && git clone https://github.com/PowerShellMafia/PowerSploit
 
 #####################################################
 # Tools to add
@@ -245,8 +245,8 @@ RUN cd ~/tools \
 
 # Payloads
 RUN cd \
-	&& git clone --recursive https://github.com/drtychai/payloads && cd ./payloads \
-	&& chmod +x ./init.sh \
-	&& ./init.sh
+    && git clone --recursive https://github.com/drtychai/payloads && cd ./payloads \
+    && chmod +x ./init.sh \
+    && ./init.sh
 
 WORKDIR /root/
