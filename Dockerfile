@@ -14,9 +14,9 @@ RUN mkdir ~/tools
 
 # Install base tools
 RUN apt update \
-	&& apt -y install vim patchelf netcat socat strace ltrace curl wget git gdb \
-	&& apt -y install man sudo inetutils-ping gnupg locate ftp \
-	&& apt clean
+    && apt -y install vim patchelf netcat socat strace ltrace curl wget git gdb \
+    && apt -y install man sudo inetutils-ping gnupg locate ftp \
+    && apt clean
 
 RUN apt update \
     && apt -y install python-dev python-pip \
@@ -28,8 +28,8 @@ RUN python -m pip install --upgrade pip
 RUN pip install --upgrade setuptools
 
 RUN apt update \
-	&& apt install -y ruby-full \
-	&& apt clean
+    && apt install -y ruby-full \
+    && apt clean
 
 # Install Go
 # This is taken from https://raw.githubusercontent.com/docker-library/golang/master/1.11/stretch/Dockerfile
@@ -125,50 +125,50 @@ RUN TMUX_VERSION=$(curl -s https://api.github.com/repos/tmux/tmux/releases/lates
 
 # Install msf
 RUN curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall \
-	&& chmod 755 msfinstall \
-	&& ./msfinstall
+    && chmod 755 msfinstall \
+    && ./msfinstall
 
 # Install exploit-db searchsploit
 RUN git clone https://github.com/offensive-security/exploitdb.git /opt/exploitdb \
-	&& ln -sf /opt/exploitdb/searchsploit /usr/bin/searchsploit
+    && ln -sf /opt/exploitdb/searchsploit /usr/bin/searchsploit
 
 # Clone wordlists
 RUN cd /usr/share/ \
-	&& git clone https://github.com/drtychai/wordlists.git /usr/share/wordlists \
-	&& tar zxvf /usr/share/wordlists/rockyou.tar.gz -C /usr/share/wordlists/ \
-	&& rm /usr/share/wordlists/rockyou.tar.gz
+    && git clone https://github.com/drtychai/wordlists.git /usr/share/wordlists \
+    && tar zxvf /usr/share/wordlists/rockyou.tar.gz -C /usr/share/wordlists/ \
+    && rm /usr/share/wordlists/rockyou.tar.gz
 
 #####################################################
 # Install information gathering tools
 #####################################################
 RUN apt update \
-	&& apt -y install aircrack-ng arp-scan masscan nikto nmap snmp \
-	&& apt clean
+    && apt -y install aircrack-ng arp-scan masscan nikto nmap snmp \
+    && apt clean
 
 # Grab lineum, linuxprivcheck, windows-priv-checker
 RUN cd $HOME/tools \
-	&& git clone https://github.com/rebootuser/LinEnum \
-	&& git clone https://github.com/sleventyeleven/linuxprivchecker \
-	&& git clone https://github.com/pentestmonkey/windows-privesc-check
+    && git clone https://github.com/rebootuser/LinEnum \
+    && git clone https://github.com/sleventyeleven/linuxprivchecker \
+    && git clone https://github.com/pentestmonkey/windows-privesc-check
 
 # Install and alias dnsrecon
 RUN cd $HOME/tools \
-	&& git clone https://github.com/darkoperator/dnsrecon \
-	&& pip install -r ./dnsrecon/requirements.txt \
-	&& chmod +x ./dnsrecon/dnsrecon.py \
-	&& echo 'alias dnsrecon="~/tools/dnsrecon/dnsrecon.py"' >> $HOME/.bashrc
+    && git clone https://github.com/darkoperator/dnsrecon \
+    && pip install -r ./dnsrecon/requirements.txt \
+    && chmod +x ./dnsrecon/dnsrecon.py \
+    && echo 'alias dnsrecon="~/tools/dnsrecon/dnsrecon.py"' >> $HOME/.bashrc
 
 # Install and alias enum4linux
 RUN cd $HOME/tools \
-	&& git clone https://github.com/portcullislabs/enum4linux \
-	&& chmod +x ./enum4linux/enum4linux.pl \
-	&& echo 'alias enum4linux="~/tools/enum4linux/enum4linux.pl"' >> $HOME/.bashrc
+    && git clone https://github.com/portcullislabs/enum4linux \
+    && chmod +x ./enum4linux/enum4linux.pl \
+    && echo 'alias enum4linux="~/tools/enum4linux/enum4linux.pl"' >> $HOME/.bashrc
 
 # Install and alias sublist3r
 RUN cd $HOME/tools \
-	&& git clone https://github.com/aboul3la/Sublist3r \
-	&& chmod +x ./Sublist3r/sublist3r.py \
-	&& echo 'alias sublist3r="~/tools/sublist3r/sublist3r.py"' >> $HOME/.bashrc
+    && git clone https://github.com/aboul3la/Sublist3r \
+    && chmod +x ./Sublist3r/sublist3r.py \
+    && echo 'alias sublist3r="~/tools/sublist3r/sublist3r.py"' >> $HOME/.bashrc
 
 # Install aquatone
 RUN gem install aquatone
