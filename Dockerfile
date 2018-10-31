@@ -15,7 +15,7 @@ RUN mkdir ~/tools
 # Install base tools
 RUN apt update \
     && apt -y install vim patchelf netcat socat strace ltrace curl wget git gdb \
-    && apt -y install man sudo inetutils-ping gnupg locate ftp openvpn \
+    && apt -y install man sudo inetutils-ping gnupg locate ftp \
     && apt clean
 
 RUN apt update \
@@ -142,7 +142,7 @@ RUN cd /usr/share/ \
 # Install information gathering tools
 #####################################################
 RUN apt update \
-    && apt -y install aircrack-ng arp-scan masscan nikto nmap snmp \
+    && apt -y install aircrack-ng arp-scan masscan nikto nmap snmp openvpn \
     && apt clean
 
 # Grab lineum, linuxprivcheck, windows-priv-checker

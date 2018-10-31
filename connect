@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$#" -ge 1 ]; then
-    docker exec -it kpen $@
+    docker exec -it pendock $@
 else
-    docker exec -it kpen tmux
+    docker exec -it pendock tmux
 fi
