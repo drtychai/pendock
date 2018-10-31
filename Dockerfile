@@ -179,8 +179,6 @@ RUN cd $HOME/tools \
     && chmod +x ./dirsearch/dirsearch.py \
     && echo 'alias dirsearch="~/tools/dirsearch/dirsearch.py"' >> $HOME/.bashrc
 
-# Install and alias dirb
-
 # Install gobuster
 RUN cd $GOPATH/src \
     && git clone https://github.com/OJ/gobuster && cd ./gobuster \
@@ -188,9 +186,10 @@ RUN cd $GOPATH/src \
 
 # Install wfuzz
 RUN cd $HOME/tools \
-    && git clone https://github.com/xmendez/wfuzz && cd ./wfuzz
-    #&& pip install --upgrade setuptools \
-    #&& pip install $HOME/tools/wfuzz
+    && git clone https://github.com/xmendez/wfuzz
+    #&& apt install libcurl4-gnutls-dev \
+    #&& pip install ./wfuzz \
+	#&& apt clean
 
 # Install impacket
 RUN cd $HOME/tools \
