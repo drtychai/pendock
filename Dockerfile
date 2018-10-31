@@ -15,7 +15,7 @@ RUN mkdir ~/tools
 # Install base tools
 RUN apt update \
     && apt -y install vim patchelf netcat socat strace ltrace curl wget git gdb \
-    && apt -y install man sudo inetutils-ping gnupg locate ftp \
+    && apt -y install man sudo inetutils-ping gnupg locate ftp openvpn \
     && apt clean
 
 RUN apt update \
