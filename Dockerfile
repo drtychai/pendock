@@ -201,6 +201,12 @@ RUN cd $HOME/tools \
     && git clone https://github.com/quickbreach/SMBetray && cd ./SMBetray \
     && chmod +x ./install.sh && echo 'y' - | ./install.sh
 
+# Install wpscan
+RUN cd $HOME/tools \
+    && git clone https://github.com/wpscanteam/wpscan && cd ./wpscan/ \
+	&& gem install bundle \
+	&& bundle install && rake install
+
 #####################################################
 # Exploitation tools
 #####################################################
