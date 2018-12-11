@@ -15,7 +15,8 @@ RUN mkdir ~/tools
 # Install base tools
 RUN apt update \
     && apt -y install vim patchelf netcat socat strace ltrace curl wget git gdb \
-    && apt -y install man sudo inetutils-ping gnupg locate ftp \
+    && apt -y install man sudo inetutils-ping gnupg locate ftp p7zip \
+	&& apt -y install libgmp-dev libmpfr-dev libmpc-dev \
     && apt clean
 
 RUN apt update \
@@ -240,6 +241,12 @@ RUN cd ~/tools \
 # Clone powersploit
 RUN cd ~/tools \
     && git clone https://github.com/PowerShellMafia/PowerSploit
+
+# Alias RsaCtfTool
+RUN pip install gmpy2 Crypto && pip3 install gmpy2 Crypto \
+    && ct ~/tools \
+	&& git clone https://github.com/Ganapati/RsaCtfTool
+	&& echo 'alias rsactf="~/tools/RsaCtfTool/RsaCtfTool.py"' >> $HOME/.bashrc
 
 #####################################################
 # Tools to add
