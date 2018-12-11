@@ -16,7 +16,7 @@ RUN mkdir ~/tools
 RUN apt update \
     && apt -y install vim patchelf netcat socat strace ltrace curl wget git gdb \
     && apt -y install man sudo inetutils-ping gnupg locate ftp p7zip \
-	&& apt -y install libgmp-dev libmpfr-dev libmpc-dev \
+	&& apt -y install libgmp-dev libmpfr-dev libmpc-dev dnsutils \
     && apt clean
 
 RUN apt update \
