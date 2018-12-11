@@ -244,7 +244,7 @@ RUN cd ~/tools \
 
 # Alias RsaCtfTool
 RUN pip install gmpy2 Crypto && pip3 install gmpy2 Crypto \
-    && ct ~/tools \
+    && cd ~/tools \
 	&& git clone https://github.com/Ganapati/RsaCtfTool \
 	&& echo 'alias rsactf="~/tools/RsaCtfTool/RsaCtfTool.py"' >> $HOME/.bashrc
 
