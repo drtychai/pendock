@@ -265,10 +265,10 @@ RUN cd ~/tools \
 
 # Alias RsaCtfTool
 RUN python -m pip install gmpy2 Crypto pycryptodome \
-	&& python3 -m pip install gmpy2 Crypto pycryptodome \
+    && python3 -m pip install gmpy2 Crypto pycryptodome \
     && cd ~/tools \
-	&& git clone https://github.com/Ganapati/RsaCtfTool \
-	&& echo 'alias rsactf="~/tools/RsaCtfTool/RsaCtfTool.py"' >> $HOME/.bashrc
+    && git clone https://github.com/Ganapati/RsaCtfTool \
+    && echo 'alias rsactf="~/tools/RsaCtfTool/RsaCtfTool.py"' >> $HOME/.bashrc
 
 #####################################################
 # Tools to add
