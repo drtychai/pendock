@@ -16,7 +16,7 @@ RUN mkdir ~/tools
 RUN apt update \
     && apt -y install vim patchelf netcat socat strace ltrace curl wget git gdb \
     && apt -y install man sudo inetutils-ping gnupg locate ftp p7zip \
-	&& apt -y install libgmp-dev libmpfr-dev libmpc-dev dnsutils \
+    && apt -y install libgmp-dev libmpfr-dev libmpc-dev dnsutils \
     && apt clean
 
 RUN apt update \
@@ -202,11 +202,33 @@ RUN cd $HOME/tools \
     && git clone https://github.com/quickbreach/SMBetray && cd ./SMBetray \
     && chmod +x ./install.sh && echo 'y' - | ./install.sh
 
+# Install SMBmap
+RUN cd $HOME/tools \
+	&& git clone https://github.com/ShawnDEvans/smbmap \
+	&& cd smbmap; python2 -m pip install -r requirements.txt \
+	&& chmod +x smbmap.py \
+	&& echo 'alias smbmap="~/tools/smbmap/smbmap.py"' >> $HOME/.bashrc
+
 # Install wpscan
 RUN cd $HOME/tools \
     && git clone https://github.com/wpscanteam/wpscan && cd ./wpscan/ \
 	&& gem install bundle \
 	&& bundle install && rake install
+
+# Install skipfish
+RUN apt install -y gtk-doc-tools libpcre3-dev libidn11-dev \
+	&& apt clean
+
+RUN cd $HOME/tools \
+	&& wget -q ftp://alpha.gnu.org/pub/gnu/libidn/libidn2-2.0.0.tar.gzn/libidn2-2.0.0.tar.gz \
+	&& tar zxvf libidn2-2.0.0.tar.gz \
+	&& cd libidn2-2.0.0; make && make install
+
+RUN cd $HOME/tools \
+	&& git clone https://github.com/spinkham/skipfish \
+	&& cd ./skipfish; make \
+	&& echo 'alias skipfish="~/tools/skipfish/skipfish"' >> $HOME/.bashrc
+
 
 #####################################################
 # Exploitation tools
