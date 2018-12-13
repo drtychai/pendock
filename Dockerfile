@@ -21,7 +21,7 @@ RUN apt update \
 
 RUN apt update \
     && apt -y install python-dev python-pip \
-    && apt -y install python3-dev python3-pip \
+    && apt -y install python3-dev python3-pip python3-venv \
     && apt clean
 
 RUN python3 -m pip install --upgrade pip
