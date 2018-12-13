@@ -243,7 +243,8 @@ RUN cd ~/tools \
     && git clone https://github.com/PowerShellMafia/PowerSploit
 
 # Alias RsaCtfTool
-RUN pip install gmpy2 Crypto && pip3 install gmpy2 Crypto \
+RUN python -m pip install gmpy2 Crypto pycryptodome \
+	&& python3 -m pip install gmpy2 Crypto pycryptodome \
     && cd ~/tools \
 	&& git clone https://github.com/Ganapati/RsaCtfTool \
 	&& echo 'alias rsactf="~/tools/RsaCtfTool/RsaCtfTool.py"' >> $HOME/.bashrc
@@ -253,6 +254,7 @@ RUN pip install gmpy2 Crypto && pip3 install gmpy2 Crypto \
 ## hashcat
 ## merlin
 ## potentially add GUI support and tools
+## make a global requirements.txt so all python pkgs
 #####################################################
 
 # Payloads
