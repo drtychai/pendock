@@ -224,6 +224,11 @@ RUN cd $HOME/tools \
     && cd ./skipfish; make \
     && echo 'alias skipfish="~/tools/skipfish/skipfish"' >> $HOME/.bashrc
 
+# Install Myrthril Classic
+RUN cd $HOME/tools \
+    && git clone https://github.com/ConsenSys/mythril-classic \
+	&& python3 -m pip install ./mythril-classic
+
 #####################################################
 # Exploitation tools
 #####################################################
