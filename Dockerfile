@@ -22,6 +22,8 @@ RUN apt update \
 #####################################################
 # Languages
 #####################################################
+
+# Install python2/python3
 RUN apt update \
     && apt -y install python-dev python-pip \
     && apt -y install python3-dev python3-pip python3-venv \
@@ -31,8 +33,20 @@ RUN python3 -m pip install --upgrade pip
 RUN python -m pip install --upgrade pip
 RUN pip install --upgrade setuptools
 
+# Install ruby
 RUN apt update \
     && apt install -y ruby-full \
+    && apt clean
+
+# Install powershell
+RUN apt update \
+    && apt install -y liblttng-ust0 \
+    && apt clean
+
+RUN cd /dev/shm \
+    && wget https://github.com/PowerShell/PowerShell/releases/download/v6.1.1/powershell_6.1.1-1.ubuntu.16.04_amd64.deb \
+	&& dpkg -i powershell_6.1.1-1.ubuntu.16.04_amd64.deb \
+    && apt install -f \
     && apt clean
 
 # Install Go
@@ -75,10 +89,6 @@ ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
-
-RUN apt update \
-    && apt -y install powershell \
-    && apt clean
 
 #####################################################
 # Install pwn/RE tools
