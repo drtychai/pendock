@@ -240,13 +240,13 @@ RUN apt install -y gtk-doc-tools libpcre3-dev libidn11-dev libssl-dev zlib1g-dev
     && apt clean
 RUN cd $HOME/tools \
     && git clone https://github.com/spinkham/skipfish \
-	&& cd ./skipfish; make \
+    && cd ./skipfish; make \
     && echo 'alias skipfish="~/tools/skipfish/skipfish"' >> $HOME/.bashrc
 
 # Install Myrthril Classic
 RUN cd $HOME/tools \
     && git clone https://github.com/ConsenSys/mythril-classic \
-	&& python3 -m pip install ./mythril-classic
+    && python3 -m pip install ./mythril-classic
 
 #####################################################
 # Exploitation tools
