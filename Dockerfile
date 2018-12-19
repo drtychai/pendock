@@ -45,7 +45,7 @@ RUN apt update \
 
 RUN cd /dev/shm \
     && wget https://github.com/PowerShell/PowerShell/releases/download/v6.1.1/powershell_6.1.1-1.ubuntu.16.04_amd64.deb \
-	&& dpkg -i powershell_6.1.1-1.ubuntu.16.04_amd64.deb \
+    && dpkg -i powershell_6.1.1-1.ubuntu.16.04_amd64.deb \
     && apt install -f \
     && apt clean
 
