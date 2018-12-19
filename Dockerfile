@@ -19,6 +19,9 @@ RUN apt update \
     && apt -y install libgmp-dev libmpfr-dev libmpc-dev dnsutils \
     && apt clean
 
+#####################################################
+# Languages
+#####################################################
 RUN apt update \
     && apt -y install python-dev python-pip \
     && apt -y install python3-dev python3-pip python3-venv \
@@ -73,6 +76,13 @@ ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
+RUN apt update \
+    && apt -y install powershell \
+    && apt clean
+
+#####################################################
+# Install pwn/RE tools
+#####################################################
 RUN apt update \
     && apt -y install gcc-multilib g++-multilib \
     && apt clean
@@ -274,7 +284,7 @@ RUN python -m pip install gmpy2 Crypto pycryptodome \
 ## hashcat
 ## merlin
 ## potentially add GUI support and tools
-## make a global requirements.txt so all python pkgs
+## make a global requirements.txt for all python pkgs
 #####################################################
 
 # Payloads
