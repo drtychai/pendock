@@ -5,10 +5,10 @@ Inspired by [grazfather](https://github.com/Grazfather/pwndock), I decided to cr
 Note: You should not clone this repo. Either clone [mypendock](https://github.com/drtychai/mypendock) or use `drtychai/pendock:latest` in your Dockerfile to grab the latest build.
 
 ## Installation
-1. Install Docker:
-  macOS: `brew cask install docker && brew install docker`
-  Ubuntu: `sudo apt update && sudo apt install docker-ce`
-  Windows: https://docs.docker.com/docker-for-windows/install/
+1. Install Docker:  
+  macOS: `brew cask install docker && brew install docker`  
+  Ubuntu: `sudo apt update && sudo apt install docker-ce`  
+  Windows: https://docs.docker.com/docker-for-windows/install/  
 2. Clone [this OTHER repo](https://github.com/drtychai/mypendock).
 3. Add customizations to the _Dockerfile_, and the other scripts if your desire, for example, to use a different name.
 4. Build: `./build`
