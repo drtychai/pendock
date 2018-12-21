@@ -15,7 +15,7 @@ RUN mkdir ~/tools
 # Install base tools
 RUN apt update \
     && apt -y install vim patchelf netcat socat strace ltrace curl wget git gdb \
-    && apt -y install man sudo inetutils-ping gnupg locate ftp p7zip \
+    && apt -y install man sudo inetutils-ping gnupg locate ftp p7zip traceroute \
     && apt -y install libgmp-dev libmpfr-dev libmpc-dev dnsutils \
     && apt clean
 
@@ -178,6 +178,12 @@ RUN cd $HOME/tools \
     && pip install -r ./dnsrecon/requirements.txt \
     && chmod +x ./dnsrecon/dnsrecon.py \
     && echo 'alias dnsrecon="~/tools/dnsrecon/dnsrecon.py"' >> $HOME/.bashrc
+
+# Install dnscat2
+RUN cd $HOME/tools \
+    && git clone https://github.com/iagox86/dnscat2 \
+    && cd dnscat2; make \
+    && gem install bundler
 
 # Install and alias enum4linux
 RUN cd $HOME/tools \
