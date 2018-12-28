@@ -49,6 +49,14 @@ RUN cd /dev/shm \
     && apt install -f \
     && apt clean
 
+# JS
+RUN apt update \
+    && apt install -y npm \
+    && npm cache clean -f \
+    && npm install -g n \
+    && n stable \
+    && apt clean
+
 # Install Go
 # This is taken from https://raw.githubusercontent.com/docker-library/golang/master/1.11/stretch/Dockerfile
 ENV GOLANG_VERSION 1.11
