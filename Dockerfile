@@ -262,6 +262,10 @@ RUN cd $HOME/tools \
     && git clone https://github.com/ConsenSys/mythril-classic \
     && python3 -m pip install ./mythril-classic
 
+# Install grpcurl
+RUN go get github.com/fullstorydev/grpcurl \
+    && go install github.com/fullstorydev/grpcurl/cmd/grpcurl
+
 #####################################################
 # Exploitation tools
 #####################################################
