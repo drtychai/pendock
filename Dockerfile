@@ -266,6 +266,11 @@ RUN cd $HOME/tools \
 RUN go get github.com/fullstorydev/grpcurl \
     && go install github.com/fullstorydev/grpcurl/cmd/grpcurl
 
+# Install reconnoitre
+RUN cd HOME/tools \
+    && git clone https://github.com/codingo/Reconnoitre && cd ./Reconnoitre
+    && python3 setup.py install
+
 #####################################################
 # Exploitation tools
 #####################################################
