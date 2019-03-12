@@ -271,6 +271,15 @@ RUN cd $HOME/tools \
     && git clone https://github.com/codingo/Reconnoitre && cd ./Reconnoitre \
     && python3 setup.py install
 
+# Install AWScli
+RUN python3 -m pip install awscli
+
+# Install Scout Suite
+RUN cd $HOME/tools \
+    && git clone https://github.com/nccgroup/ScoutSuite && cd ./ScoutSuite \
+    && python3 -m pip install -r requirements.txt \
+	&& echo 'alias scout="~/tools/ScoutSuite/Scout.py"' >> $HOME/.bashrc
+
 #####################################################
 # Exploitation tools
 #####################################################
