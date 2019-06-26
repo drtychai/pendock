@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -44,12 +44,12 @@ RUN apt update \
     && apt clean
 
 RUN cd /dev/shm \
-    && wget https://github.com/PowerShell/PowerShell/releases/download/v6.1.1/powershell_6.1.1-1.ubuntu.16.04_amd64.deb \
-    && dpkg -i powershell_6.1.1-1.ubuntu.16.04_amd64.deb \
+    && wget https://github.com/PowerShell/PowerShell/releases/download/v6.2.1/powershell_6.2.1-1.ubuntu.18.04_amd64.deb \
+	&& dpkg -i powershell_6.2.1-1.ubuntu.18.04_amd64.deb \
     && apt install -f \
     && apt clean
 
-# JS
+# JavaScript
 RUN apt update \
     && apt install -y npm \
     && npm cache clean -f \
@@ -250,7 +250,7 @@ RUN cd $HOME/tools \
     && bundle install && rake install
 
 # Install skipfish
-RUN apt install -y gtk-doc-tools libpcre3-dev libidn11-dev libssl-dev zlib1g-dev \
+RUN apt install -y gtk-doc-tools libpcre3-dev libidn11-dev libssl1.0-dev zlib1g-dev \
     && apt clean
 RUN cd $HOME/tools \
     && git clone https://github.com/spinkham/skipfish \
