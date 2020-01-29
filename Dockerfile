@@ -13,10 +13,10 @@ ENV LC_ALL en_US.UTF-8
 RUN mkdir ~/tools
 
 # Install base tools
-RUN apt update \
+RUN apt update --fix-missing \
     && apt -y install vim patchelf netcat socat strace ltrace curl wget git gdb \
     && apt -y install man sudo inetutils-ping gnupg locate ftp p7zip traceroute \
-    && apt -y install libgmp-dev libmpfr-dev libmpc-dev dnsutils \
+    && apt -y install libgmp-dev libmpfr-dev libmpc-dev dnsutils tree \
     && apt clean
 
 #####################################################
