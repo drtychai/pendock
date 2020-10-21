@@ -23,6 +23,34 @@ RUN apt update --fix-missing \
 # Languages
 #####################################################
 
+# Install Rust
+# This is taken from https://raw.githubusercontent.com/rust-lang/docker-rust/master/1.47.0/buster/Dockerfile
+ENV RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    PATH=/usr/local/cargo/bin:$PATH \
+    RUST_VERSION=1.47.0
+
+RUN set -eux; \
+    dpkgArch="$(dpkg --print-architecture)"; \
+    case "${dpkgArch##*-}" in \
+        amd64) rustArch='x86_64-unknown-linux-gnu'; rustupSha256='49c96f3f74be82f4752b8bffcf81961dea5e6e94ce1ccba94435f12e871c3bdb' ;; \
+        armhf) rustArch='armv7-unknown-linux-gnueabihf'; rustupSha256='5a2be2919319e8778698fa9998002d1ec720efe7cb4f6ee4affb006b5e73f1be' ;; \
+        arm64) rustArch='aarch64-unknown-linux-gnu'; rustupSha256='d93ef6f91dab8299f46eef26a56c2d97c66271cea60bf004f2f088a86a697078' ;; \
+        i386) rustArch='i686-unknown-linux-gnu'; rustupSha256='e3d0ae3cfce5c6941f74fed61ca83e53d4cd2deb431b906cbd0687f246efede4' ;; \
+        *) echo >&2 "unsupported architecture: ${dpkgArch}"; exit 1 ;; \
+    esac; \
+    url="https://static.rust-lang.org/rustup/archive/1.22.1/${rustArch}/rustup-init"; \
+    wget "$url"; \
+    echo "${rustupSha256} *rustup-init" | sha256sum -c -; \
+    chmod +x rustup-init; \
+    ./rustup-init -y --no-modify-path --profile minimal --default-toolchain $RUST_VERSION --default-host ${rustArch}; \
+    rm rustup-init; \
+    chmod -R a+w $RUSTUP_HOME $CARGO_HOME; \
+    rustup --version; \
+    cargo --version; \
+    rustc --version;
+
+
 # Install python2/python3
 RUN apt update \
     && apt -y install python-dev python-pip \
@@ -58,44 +86,109 @@ RUN apt update \
     && apt clean
 
 # Install Go
-# This is taken from https://raw.githubusercontent.com/docker-library/golang/master/1.11/stretch/Dockerfile
-ENV GOLANG_VERSION 1.11
+# This is taken from https://raw.githubusercontent.com/docker-library/golang/master/1.15/buster/Dockerfile
+ENV PATH /usr/local/go/bin:$PATH
+ENV GOLANG_VERSION 1.15.3
 
 RUN set -eux; \
-    \
-# this "case" statement is generated via "update.sh"
-    dpkgArch="$(dpkg --print-architecture)"; \
-    case "${dpkgArch##*-}" in \
-        amd64) goRelArch='linux-amd64'; goRelSha256='b3fcf280ff86558e0559e185b601c9eade0fd24c900b4c63cd14d1d38613e499' ;; \
-        armhf) goRelArch='linux-armv6l'; goRelSha256='8ffeb3577d8ca5477064f1cb8739835973c866487f2bf81df1227eaa96826acd' ;; \
-        arm64) goRelArch='linux-arm64'; goRelSha256='e4853168f41d0bea65e4d38f992a2d44b58552605f623640c5ead89d515c56c9' ;; \
-        i386) goRelArch='linux-386'; goRelSha256='1a91932b65b4af2f84ef2dce10d790e6a0d3d22c9ea1bdf3d8c4d9279dfa680e' ;; \
-        ppc64el) goRelArch='linux-ppc64le'; goRelSha256='e874d617f0e322f8c2dda8c23ea3a2ea21d5dfe7177abb1f8b6a0ac7cd653272' ;; \
-        s390x) goRelArch='linux-s390x'; goRelSha256='c113495fbb175d6beb1b881750de1dd034c7ae8657c30b3de8808032c9af0a15' ;; \
-        *) goRelArch='src'; goRelSha256='afc1e12f5fe49a471e3aae7d906c73e9d5b1fdd36d52d72652dde8f6250152fb'; \
-            echo >&2; echo >&2 "warning: current architecture ($dpkgArch) does not have a corresponding Go binary release; will be building from source"; echo >&2 ;; \
-    esac; \
-    \
-    url="https://golang.org/dl/go${GOLANG_VERSION}.${goRelArch}.tar.gz"; \
-    wget -O go.tgz "$url"; \
-    echo "${goRelSha256} *go.tgz" | sha256sum -c -; \
-    tar -C /usr/local -xzf go.tgz; \
-    rm go.tgz; \
-    \
-    if [ "$goRelArch" = 'src' ]; then \
-        echo >&2; \
-        echo >&2 'error: UNIMPLEMENTED'; \
-        echo >&2 'TODO install golang-any from jessie-backports for GOROOT_BOOTSTRAP (and uninstall after build)'; \
-        echo >&2; \
-        exit 1; \
-    fi; \
-    \
-    export PATH="/usr/local/go/bin:$PATH"; \
-    go version
+	\
+	dpkgArch="$(dpkg --print-architecture)"; \
+	case "${dpkgArch##*-}" in \
+		'amd64') \
+			arch='linux-amd64'; \
+			url='https://storage.googleapis.com/golang/go1.15.3.linux-amd64.tar.gz'; \
+			sha256='010a88df924a81ec21b293b5da8f9b11c176d27c0ee3962dc1738d2352d3c02d'; \
+			;; \
+		'armhf') \
+			arch='linux-armv6l'; \
+			url='https://storage.googleapis.com/golang/go1.15.3.linux-armv6l.tar.gz'; \
+			sha256='aacb49968d08e222c83dea7307b4523c3ae498a5d2e91cd0e480ef3f198ffef6'; \
+			;; \
+		'arm64') \
+			arch='linux-arm64'; \
+			url='https://storage.googleapis.com/golang/go1.15.3.linux-arm64.tar.gz'; \
+			sha256='b8b88a87ada918ef5189fa5938ef4c46a4f61952a34317612aaac705f4275f80'; \
+			;; \
+		'i386') \
+			arch='linux-386'; \
+			url='https://storage.googleapis.com/golang/go1.15.3.linux-386.tar.gz'; \
+			sha256='e2f4f9ccfebd38b112fe84572af44bb2fa230d605fcec84def9498095c1bd6ce'; \
+			;; \
+		'ppc64el') \
+			arch='linux-ppc64le'; \
+			url='https://storage.googleapis.com/golang/go1.15.3.linux-ppc64le.tar.gz'; \
+			sha256='ea420501f9dc4bb1f0db37bb91a7d4e1bb7607bc1865c3ca51ed802477c169ad'; \
+			;; \
+		's390x') \
+			arch='linux-s390x'; \
+			url='https://storage.googleapis.com/golang/go1.15.3.linux-s390x.tar.gz'; \
+			sha256='098b256bdee92857270a23a47b396e403be378d4cf8331611038518c921de46d'; \
+			;; \
+		*) \
+# https://github.com/golang/go/issues/38536#issuecomment-616897960
+			arch='src'; \
+			url='https://storage.googleapis.com/golang/go1.15.3.src.tar.gz'; \
+			sha256='896a602570e54c8cdfc2c1348abd4ffd1016758d0bd086ccd9787dbfc9b64888'; \
+			echo >&2; \
+			echo >&2 "warning: current architecture ($dpkgArch) does not have a corresponding Go binary release; will be building from source"; \
+			echo >&2; \
+			;; \
+	esac; \
+	\
+	wget -O go.tgz.asc "$url.asc" --progress=dot:giga; \
+	wget -O go.tgz "$url" --progress=dot:giga; \
+	echo "$sha256 *go.tgz" | sha256sum --strict --check -; \
+	\
+# https://github.com/golang/go/issues/14739#issuecomment-324767697
+	export GNUPGHOME="$(mktemp -d)"; \
+# https://www.google.com/linuxrepositories/
+	gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys 'EB4C 1BFD 4F04 2F6D DDCC EC91 7721 F63B D38B 4796'; \
+	gpg --batch --verify go.tgz.asc go.tgz; \
+	gpgconf --kill all; \
+	rm -rf "$GNUPGHOME" go.tgz.asc; \
+	\
+	tar -C /usr/local -xzf go.tgz; \
+	rm go.tgz; \
+	\
+	if [ "$arch" = 'src' ]; then \
+		savedAptMark="$(apt-mark showmanual)"; \
+		apt-get update; \
+		apt-get install -y --no-install-recommends golang-go; \
+		\
+		goEnv="$(go env | sed -rn -e '/^GO(OS|ARCH|ARM|386)=/s//export \0/p')"; \
+		eval "$goEnv"; \
+		[ -n "$GOOS" ]; \
+		[ -n "$GOARCH" ]; \
+		( \
+			cd /usr/local/go/src; \
+			./make.bash; \
+		); \
+		\
+		apt-mark auto '.*' > /dev/null; \
+		apt-mark manual $savedAptMark > /dev/null; \
+		apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+		rm -rf /var/lib/apt/lists/*; \
+		\
+# pre-compile the standard library, just like the official binary release tarballs do
+		go install std; \
+# go install: -race is only supported on linux/amd64, linux/ppc64le, linux/arm64, freebsd/amd64, netbsd/amd64, darwin/amd64 and windows/amd64
+#		go install -race std; \
+		\
+# remove a few intermediate / bootstrapping files the official binary release tarballs do not contain
+		rm -rf \
+			/usr/local/go/pkg/*/cmd \
+			/usr/local/go/pkg/bootstrap \
+			/usr/local/go/pkg/obj \
+			/usr/local/go/pkg/tool/*/api \
+			/usr/local/go/pkg/tool/*/go_bootstrap \
+			/usr/local/go/src/cmd/dist/dist \
+		; \
+	fi; \
+	\
+	go version
 
 ENV GOPATH /go
-ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
-
+ENV PATH $GOPATH/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
 #####################################################
@@ -163,7 +256,7 @@ RUN git clone https://github.com/offensive-security/exploitdb.git /opt/exploitdb
 
 # Clone wordlists
 RUN cd /usr/share/ \
-    && git clone https://github.com/drtychai/wordlists.git /usr/share/wordlists \
+    && git clone --recursive https://github.com/drtychai/wordlists.git /usr/share/wordlists \
     && tar zxvf /usr/share/wordlists/rockyou.tar.gz -C /usr/share/wordlists/ \
     && rm /usr/share/wordlists/rockyou.tar.gz
 
@@ -263,7 +356,7 @@ RUN cd $HOME/tools \
     && python3 -m pip install ./mythril-classic
 
 # Install grpcurl
-RUN go get github.com/fullstorydev/grpcurl \
+RUN go get github.com/fullstorydev/grpcurl/... \
     && go install github.com/fullstorydev/grpcurl/cmd/grpcurl
 
 # Install reconnoitre
