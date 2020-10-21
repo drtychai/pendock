@@ -1,6 +1,7 @@
 # PenDock
+![Build](https://github.com/drtychai/pendock/workflows/Docker%20Image%20CI/badge.svg)
 
-Inspired by [grazfather](https://github.com/Grazfather/pwndock), I decided to create a fully fledged dockerized pentesting/CTF containter. This is my attempt to create a faster, more portable, and easier-to-setup version of Kali built purely on Ubuntu.
+Inspired by [pwndock](https://github.com/Grazfather/pwndock), I decided to create a fully fledged dockerized pentesting/CTF containter. This is my attempt to create a faster, more portable, and easier-to-setup version of Kali built purely on Ubuntu.
 
 Note: You should not clone this repo. Either clone [mypendock](https://github.com/drtychai/mypendock) or use `drtychai/pendock:latest` in your Dockerfile to grab the latest build.
 
